@@ -1,0 +1,17 @@
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+media/
+dent-app/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
