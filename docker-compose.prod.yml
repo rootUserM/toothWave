@@ -1,11 +1,12 @@
 services:
   backend:
     build:
-      context: ./Dentappointment-back
+      context: ./back
     container_name: backend
-    command: ["gunicorn", "--bind", "0.0.0.0:8000", "my_project.wsgi:application"]
+    command:
+      ["gunicorn", "--bind", "0.0.0.0:8000", "my_project.wsgi:application"]
     volumes:
-      - ./Dentappointment-back:/code
+      - ./back:/code
     ports:
       - "8000:8000"
     depends_on:
