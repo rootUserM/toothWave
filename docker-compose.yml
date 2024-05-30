@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: crentist
+      POSTGRES_PASSWORD: tesca123
+      POSTGRES_DB: dentapp
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./Dentappointment-back
+    command: >
+      sh -c "python manage.py makemigrations &&
+             python manage.py migrate &&
+             python manage.py collectstatic --no-input&&
+             python manage.py initadmin &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./Dentappointment-back:/code
+      - ./media:/app/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      SITE_URL: "http://127.0.0.1:8000/"
+      SECRET_KEY: django-insecure-kjgjj%wa2i=z&t+=m400r-9h(bqrxd+23kjt*&y&kk6=i4%ebr
+      DB_NAME: dentapp
+      DB_USER: crentist
+      DB_PASSWORD: tesca123
+      DB_HOST: db
+      DEBUG: "True"
+      DB_PORT: 5432
+
+  frontend:
+    build: ./appointment-front
+    volumes:
+      - ./appointment-front:/app
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:
