@@ -13,20 +13,24 @@ services:
       - db
     environment:
       - SECRET_KEY=django-insecure-kjgjj%wa2i=z&t+=m400r-9h(bqrxd+23kjt*&y&kk6=i4%ebr
-      - DB_HOST=127.0.0.1
+      - DB_HOST=db
       - DB_NAME=dentapp
       - DB_USER=crentist
       - DB_PASSWORD=tesca123
       - DB_PORT=5432
+    networks:
+      - backend-network
 
   frontend:
     build:
-      context: ./appointment-front
+      context: ./front
     container_name: frontend
     volumes:
-      - ./appointment-front:/app
+      - ./front:/app
     ports:
       - "8080:8080"
+    networks:
+      - frontend-network
 
   db:
     image: postgres:16
@@ -39,6 +43,9 @@ services:
       POSTGRES_PASSWORD: tesca123
     ports:
       - "5432:5432"
+    networks:
+      - backend-network
 
-volumes:
-  postgres_data:
+networks:
+  backend-network:
+  frontend-network:

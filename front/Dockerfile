@@ -8,6 +8,7 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 
 # Install project dependencies using Yarn
+RUN yarn add @vue/cli-service@5.0.8
 RUN yarn install
 
 # Copy the rest of the application code to the working directory

@@ -24,7 +24,7 @@ services:
     depends_on:
       - db
     environment:
-      SITE_URL: "http://127.0.0.1:8000/"
+      SITE_URL: "http://127.0.0.1:8000"
       SECRET_KEY: django-insecure-kjgjj%wa2i=z&t+=m400r-9h(bqrxd+23kjt*&y&kk6=i4%ebr
       DB_NAME: dentapp
       DB_USER: crentist
@@ -39,6 +39,7 @@ services:
       - ./front:/app
     ports:
       - "8080:8080"
+    command: yarn serve
 
 volumes:
   postgres_data:
