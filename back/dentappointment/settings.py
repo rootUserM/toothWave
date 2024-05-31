@@ -30,7 +30,9 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080",  # Replace with your Angular app's URL
+    "http://localhost:8080",
+    "http://68.183.140.197:8080",
+     
 ]
 
 # Application definition

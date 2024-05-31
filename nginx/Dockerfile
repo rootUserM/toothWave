@@ -1,5 +1,5 @@
 # Use the official Nginx image from the Docker Hub
-FROM nginx:latest
+FROM nginx:1.26.0
 
 # Copy the custom Nginx configuration file to the container
 COPY conf.d/default.conf /etc/nginx/conf.d/
