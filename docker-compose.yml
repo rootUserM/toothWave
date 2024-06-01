@@ -9,7 +9,9 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   backend:
-    build: ./back
+    build:
+      context: ./back
+      dockerfile: Dockerfile
     command: >
       sh -c "python manage.py makemigrations &&
              python manage.py migrate &&
@@ -24,7 +26,7 @@ services:
     depends_on:
       - db
     environment:
-      SITE_URL: "http://127.0.0.1:8000"
+      SITE_URL: "http://citassalud.com.mx"
       SECRET_KEY: django-insecure-kjgjj%wa2i=z&t+=m400r-9h(bqrxd+23kjt*&y&kk6=i4%ebr
       DB_NAME: dentapp
       DB_USER: crentist

@@ -1,0 +1,22 @@
+# Use a smaller base image for production
+FROM python:3.9-slim
+
+WORKDIR /app
+
+# Copy only the requirements file first to leverage Docker cache
+COPY requirements.txt .
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application code
+COPY . .
+
+# Set environment variables (adjust as necessary)
+ENV PYTHONUNBUFFERED=1
+
+# Expose the port the app runs on
+EXPOSE 8000
+
+# Use gunicorn to run the Django application
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "dentappointment.wsgi:application"]
