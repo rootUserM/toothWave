@@ -21,13 +21,11 @@ services:
       - DB_PASSWORD=tesca123
       - DB_PORT=5432
     command: >
-      sh -c "
-      python manage.py makemigrations &&
-      python manage.py migrate &&
-      python manage.py collectstatic --no-input &&
-      python manage.py initadmin &&
-      gunicorn --bind 0.0.0.0:8000 dentappointment.wsgi:application
-      "
+      sh -c "python manage.py makemigrations &&
+             python manage.py migrate &&
+             python manage.py collectstatic --no-input&&
+             python manage.py initadmin &&
+             python manage.py runserver 0.0.0.0:8000"
     networks:
       - backend-network
 
