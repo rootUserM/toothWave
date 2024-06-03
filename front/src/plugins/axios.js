@@ -1,18 +1,17 @@
-
-import axios from 'axios';
-import router from '@/router'; 
-import store from '@/store';
+import axios from "axios";
+import router from "@/router";
+import store from "@/store";
 const instance = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api',
+  baseURL: "http://0.0.0.0:8000/api",
   timeout: 5000,
 });
 
 instance.interceptors.request.use(
   (config) => {
     const accessToken = store.state.token;
-    
+
     if (accessToken) {
-      config.headers['Authorization'] = `Bearer ${accessToken}`;
+      config.headers["Authorization"] = `Bearer ${accessToken}`;
     }
     return config;
   },
@@ -26,8 +25,8 @@ instance.interceptors.response.use(
   },
   (error) => {
     if (error.response.status === 401) {
-      store.dispatch('logout');
-      router.push({ name: 'login' });
+      store.dispatch("logout");
+      router.push({ name: "login" });
     }
     return Promise.reject(error);
   }
