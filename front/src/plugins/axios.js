@@ -2,7 +2,7 @@ import axios from "axios";
 import router from "@/router";
 import store from "@/store";
 const instance = axios.create({
-  baseURL: "http://localhost:8000/api",
+  baseURL: "http://68.183.140.197/api",
   timeout: 5000,
 });
 
