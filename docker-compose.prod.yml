@@ -20,6 +20,7 @@ services:
       - DB_USER=crentist
       - DB_PASSWORD=tesca123
       - DB_PORT=5432
+      - SITE_URL="http://citassalud.com.mx"
     command: >
       sh -c "python manage.py makemigrations &&
              python manage.py migrate &&
@@ -39,6 +40,7 @@ services:
       - "8080:8080"
     networks:
       - frontend-network
+    restart: always
 
   db:
     image: postgres:16
@@ -53,6 +55,7 @@ services:
       - "5432:5432"
     networks:
       - backend-network
+    restart: always
 
   nginx:
     build:
@@ -69,6 +72,7 @@ services:
     networks:
       - backend-network
       - frontend-network
+    restart: always
 
 networks:
   backend-network:
