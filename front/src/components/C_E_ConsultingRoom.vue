@@ -23,104 +23,88 @@
       <v-card-title>
         <span class="text-h5">Clínica</span>
       </v-card-title>
-      <v-card-text>
-        <v-container>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-text-field
-                label="Nombre de Clínica"
-                v-model="form.name"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="form.webpage"
-                label="Pagina Web"
-                required
-                hint="www.miconsultorio.com"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="form.email"
-                type="email"
-                label="Email de clínica"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="form.phone_number"
-                label="Número Telefónico"
-              ></v-text-field>
-            </v-col>
-            <v-col>
-              <v-file-input
-                accept="image/png, image/jpeg"
-                placeholder="Sube aqui el logo que deseas ver en el formulario de citas."
-                prepend-icon="mdi-camera"
-                label="Logo"
-                @change="handleFileUpload"
-              ></v-file-input>
-              <div v-if="logoPreview">
-                <!-- <img
-                  :src="logoPreview"
-                  alt="Logo Preview"
-                  style="max-width: 200px; max-height: 200px"
-                />-->
-                <v-avatar>
-                  <img :src="logoPreview" alt="John" />
-                </v-avatar>
-              </div>
-            </v-col>
-            <v-col cols="12">
-              <v-textarea v-model="form.address" label="Dirección"></v-textarea>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn
-          class="text-none"
-          color="blue darken-1"
-          text
-          @click="deleteCR()"
-          :loading="loading"
-          v-if="toEdit"
-        >
-          Eliminar
-        </v-btn>
-        <v-spacer></v-spacer>
-        <v-btn
-          class="text-none"
-          @click="dialog = false"
-          color="blue darken-1"
-          text
-        >
-          Cancelar
-        </v-btn>
-        <v-btn
-          class="text-none"
-          color="blue darken-1"
-          text
-          @click="editCR()"
-          :loading="loading"
-          v-if="toEdit"
-        >
-          Editar
-        </v-btn>
-        <v-btn
-          v-else
-          @click="createCR()"
-          :loading="loading"
-          class="text-none"
-          color="blue darken-1"
-          text
-        >
-          Crear
-        </v-btn>
-      </v-card-actions>
+      <v-form ref="form" @submit.prevent="validate" v-model="valid">
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  label="Nombre de Clínica *"
+                  v-model="form.name"
+                  :rules="nameRules"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model="form.webpage"
+                  label="Pagina Web"
+                  hint="www.miconsultorio.com"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model="form.email"
+                  type="email"
+                  label="Email de clínica"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model="form.phone_number"
+                  label="Número Telefónico *"
+                  :rules="phoneRules"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col>
+                <v-file-input
+                  accept="image/png, image/jpeg"
+                  placeholder="Sube aqui el logo que deseas ver en el formulario de citas."
+                  prepend-icon="mdi-camera"
+                  label="Logo *"
+                  @change="handleFileUpload"
+                  :rules="[(v) => !!v || 'Logo es requerido']"
+                  required
+                ></v-file-input>
+                <div v-if="logoPreview">
+                  <v-avatar>
+                    <img :src="logoPreview" alt="Clinica imagen" />
+                  </v-avatar>
+                </div>
+              </v-col>
+              <v-col cols="12">
+                <v-textarea
+                  v-model="form.address"
+                  label="Dirección"
+                ></v-textarea>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            class="text-none"
+            @click="dialog = false"
+            color="blue darken-1"
+            text
+          >
+            Cancelar
+          </v-btn>
+
+          <v-btn
+            :disabled="!valid"
+            :loading="loading"
+            class="text-none"
+            color="blue darken-1"
+            text
+            type="submit"
+          >
+            Crear
+          </v-btn>
+        </v-card-actions>
+      </v-form>
     </v-card>
   </v-dialog>
 </template>
@@ -134,10 +118,27 @@ export default {
     formToEdit: Object,
   },
   data: () => ({
-    dialog: false,
+    dialog: true,
     consulting_rooms: null,
     loading: false,
+    nameRules: [
+      (v) => !!v || "Name is required",
+      (v) => (v && v.length <= 20) || "Name must be less than 10 characters",
+    ],
+    phoneRules: [
+      (v) => !!v || "Phone number is required",
+      (v) => /^\d{0,10}$/.test(v) || "Phone number must be at most 10 digits",
+    ],
     form: {
+      id_owner: null,
+      webpage: "",
+      address: "",
+      name: "",
+      email: "",
+      phone_number: "",
+    },
+    valid: true,
+    form2prov: {
       id_owner: null,
       webpage: "https://www.clinicashida.com",
       address: "Fake por ahi",
@@ -169,6 +170,16 @@ export default {
         reader.readAsDataURL(file);
         this.logo = file;
       }
+    },
+    validate() {
+      let response = this.$refs.form.validate();
+      console.log(response);
+    },
+    reset() {
+      this.$refs.form.reset();
+    },
+    resetValidation() {
+      this.$refs.form.resetValidation();
     },
     async createCR() {
       this.loading = true;

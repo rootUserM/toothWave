@@ -15,7 +15,7 @@
           width="100px"
           height="100px"
         />
-        <v-form ref="form" @submit.prevent="sendForm">
+        <v-form ref="form" v-model="valid" @submit.prevent="sendForm">
           <v-row>
             <v-col><p class="mt-3">Paciente de primera vez</p></v-col>
             <v-col>
@@ -39,6 +39,7 @@
                 outlined
                 label="Nombre *"
                 v-model="form.patient.Name"
+                :rules="nameRules"
               ></v-text-field>
               <v-row>
                 <v-col>
@@ -48,6 +49,7 @@
                     outlined
                     label="Apellido paterno *"
                     v-model="form.patient.Last_name"
+                    :rules="nameRules"
                   ></v-text-field>
                 </v-col>
                 <v-col>
@@ -57,6 +59,7 @@
                     outlined
                     label="Apellido materno *"
                     v-model="form.patient.Second_last_name"
+                    :rules="nameRules"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -69,6 +72,7 @@
               label="Numero celular *"
               hint=""
               v-model="form.patient.PhoneNumber"
+              :rules="phoneRules"
             ></v-text-field>
             <v-textarea
               name="appointment_motive"
@@ -138,6 +142,7 @@
             </v-menu>
           </v-row>
           <v-btn
+            :disabled="!valid"
             name="send_service_request"
             type="submit"
             :loading="loading"
@@ -161,6 +166,15 @@ import { mapActions } from "vuex";
 
 export default {
   data: () => ({
+    phoneRules: [
+      (v) => !!v || "Este campo es requerido",
+      (v) => /^\d{0,10}$/.test(v) || "Telefono a 10 digitos",
+    ],
+    nameRules: [
+      (v) => !!v || "Este campo es requerido",
+      (v) => (v && v.length <= 20) || "No cumple con 20 caracteres maximo",
+    ],
+    valid: true,
     logoUrl: null,
     time: null,
     menu3: false,
@@ -222,15 +236,17 @@ export default {
       this.form.id_consultingRoom = this.$route.params.id;
       this.form.patient.id_consultingRoom = this.$route.params.id;
       this.form.appointmentDate = this.date;
-      try {
-        await this.createAppointment(this.form);
-        this.showAlert = true;
-        this.$refs.form.reset();
-        this.message = "Cita agendada";
-      } catch (error) {
-        console.log(error);
+      if (this.$refs.form.validate()) {
+        try {
+          await this.createAppointment(this.form);
+          this.showAlert = true;
+          this.$refs.form.reset();
+          this.message = "Cita agendada";
+        } catch (error) {
+          console.log(error);
+        }
+        this.loading = false;
       }
-      this.loading = false;
     },
     formatDate(date) {
       if (!date) return null;
