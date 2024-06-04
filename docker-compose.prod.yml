@@ -9,6 +9,7 @@ services:
     volumes:
       - ./back:/code
       - ./media:/app/media
+      - static_volume:/app/staticfiles
     ports:
       - "8000:8000"
     depends_on:
@@ -66,6 +67,8 @@ services:
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
       - ./nginx/html:/usr/share/nginx/html
+      - static_volume:/app/staticfiles
+      - ./media:/app/media
     depends_on:
       - backend
       - frontend
