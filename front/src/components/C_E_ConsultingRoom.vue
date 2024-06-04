@@ -149,7 +149,6 @@ export default {
     logoPreview: null,
   }),
   mounted() {
-    console.log(this.$store.state.id);
     if (this.toEdit) {
       this.form = this.formToEdit;
     }

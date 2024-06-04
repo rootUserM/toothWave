@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="mt-3" justify="center">
-      <v-col cols="6" class="comment-scolled">
+      <v-col cols="12" md="6" class="comment-scolled">
         <img
           v-if="logoUrl"
           :src="logoUrl"
@@ -77,7 +77,7 @@
               v-model="form.appointmentMotive"
             ></v-textarea>
           </v-col>
-          <v-row class="my-3">
+          <v-row class="my-3 pr-4">
             <v-menu
               v-model="menu2"
               :close-on-content-click="false"
@@ -104,7 +104,7 @@
               ></v-date-picker>
             </v-menu>
           </v-row>
-          <v-row class="my-3">
+          <v-row class="my-md-3 pr-4">
             <v-menu
               ref="menu"
               v-model="menu3"
@@ -142,6 +142,8 @@
             type="submit"
             :loading="loading"
             class="text-none"
+            color="blue darken-1"
+            text
           >
             Agendar
           </v-btn>
@@ -212,7 +214,6 @@ export default {
           .substr(0, 10)
       );
       let response = await this.getConsultingRoomLogo(this.$route.params.id);
-      console.log(response.data.logo_url);
       this.logoUrl = response.data.logo_url;
     },
     async sendForm() {
