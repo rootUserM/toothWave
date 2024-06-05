@@ -1,7 +1,16 @@
 server {
     listen 80;
     server_name citassalud.com.mx www.citassalud.com.mx;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name citassalud.com.mx www.citassalud.com.mx;
     
+    ssl_certificate /etc/letsencrypt/live/citassalud.com.mx/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/citassalud.com.mx/privkey.pem;
+
     location / {
         proxy_pass http://frontend:8080;
         proxy_set_header Host $host;
