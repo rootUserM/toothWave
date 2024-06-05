@@ -32,6 +32,8 @@ ALLOWED_HOSTS = ['*']
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
     "http://68.183.140.197:8080",
+    "http://citassalud.com.mx",
+    "https://citassalud.com.mx",
 ]
 
 # Application definition
