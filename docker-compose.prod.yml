@@ -68,7 +68,6 @@ services:
       - ./nginx/conf.d:/etc/nginx/conf.d
       - ./media:/app/media
       - static_volume:/app/staticfiles
-      - ./back/static:/app/staticfiles # Mount static files from Django app
       - ./front/dist:/usr/share/nginx/html # Mount Vue.js dist folder to serve as Nginx HTML
     depends_on:
       - backend
