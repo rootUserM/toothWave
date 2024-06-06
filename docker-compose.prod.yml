@@ -38,10 +38,9 @@ services:
     container_name: frontend
     volumes:
       - ./front:/app
-    ports:
-      - "8080:8080"
     networks:
       - frontend-network
+      - backend-network
     restart: always
 
   db:
@@ -67,12 +66,12 @@ services:
       - "80:80"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./nginx/html:/usr/share/nginx/html
-      - static_volume:/app/staticfiles
       - ./media:/app/media
+      - static_volume:/app/staticfiles
+      - ./back/static:/app/staticfiles # Mount static files from Django app
+      - ./front/dist:/usr/share/nginx/html # Mount Vue.js dist folder to serve as Nginx HTML
     depends_on:
       - backend
-      - frontend
     networks:
       - backend-network
       - frontend-network
