@@ -21,6 +21,7 @@ FROM nginx:1.26.0
 
 # Set ownership and permissions for the HTML directory
 RUN chown -R nginx:nginx /usr/share/nginx/html
+RUN chown -R www-data:www-data /usr/share/nginx/html
 RUN chmod -R 755 /usr/share/nginx/html
 
 # Copy built Vue.js app from build-stage
