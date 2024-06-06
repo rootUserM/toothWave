@@ -27,13 +27,14 @@ services:
              python manage.py migrate &&
              python manage.py collectstatic --no-input&&
              python manage.py initadmin &&
-             gunicorn --bind 0.0.0.0:8000 dentappointment.wsgi:application"
+             gunicorn --bind 0.0.0.0:8000 dentappointment.wsgi"
     networks:
       - backend-network
 
   frontend:
     build:
       context: ./front
+      dockerfile: Dockerfile.prod
     container_name: frontend
     volumes:
       - ./front:/app
