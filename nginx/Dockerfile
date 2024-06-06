@@ -2,6 +2,7 @@
 FROM nginx:1.26.0
 
 RUN chown -R nginx:nginx /usr/share/nginx/html
+RUN chown -R www-data:www-data /usr/share/nginx/html
 RUN chmod -R 755 /usr/share/nginx/html
 
 # Copy the custom Nginx configuration file to the container

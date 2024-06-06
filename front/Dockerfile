@@ -1,23 +1,36 @@
-# Use an official Node.js runtime as a parent image
-FROM node:16-alpine
+# Stage 1: Build Vue.js app
+FROM node:16-alpine as build-stage
 
-# Set the working directory in the container
+# Set working directory
 WORKDIR /app
 
-# Copy package.json and yarn.lock to the working directory
+# Copy package.json and yarn.lock files
 COPY package.json yarn.lock ./
 
-# Install project dependencies using Yarn
+# Install dependencies
 RUN yarn install
 
-# Copy the rest of the application code to the working directory
+# Copy all files
 COPY . .
 
-# Build the application
+# Build the Vue.js app
 RUN yarn build
 
-# Expose the port the app runs on
-EXPOSE 8080
+# Stage 2: Serve Vue.js app with Nginx
+FROM nginx:1.26.0
 
-# Command to run the application
-CMD ["yarn", "serve"]
+# Set ownership and permissions for the HTML directory
+RUN chown -R nginx:nginx /usr/share/nginx/html
+RUN chmod -R 755 /usr/share/nginx/html
+
+# Copy built Vue.js app from build-stage
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+
+# Copy custom Nginx configuration file to the container
+COPY nginx/default.conf /etc/nginx/conf.d/
+
+# Expose port 80
+EXPOSE 80
+
+# Start Nginx when the container starts
+CMD ["nginx", "-g", "daemon off;"]
