@@ -116,9 +116,10 @@ export default {
   props: {
     toEdit: Boolean,
     formToEdit: Object,
+    defaultOpen: Boolean,
   },
   data: () => ({
-    dialog: true,
+    dialog: false,
     consulting_rooms: null,
     loading: false,
     nameRules: [
