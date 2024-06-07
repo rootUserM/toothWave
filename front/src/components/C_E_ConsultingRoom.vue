@@ -173,8 +173,9 @@ export default {
       }
     },
     validate() {
-      let response = this.$refs.form.validate();
-      console.log(response);
+      if (this.$refs.form.validate()) {
+        this.createCR();
+      }
     },
     reset() {
       this.$refs.form.reset();
