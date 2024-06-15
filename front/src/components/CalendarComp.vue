@@ -142,7 +142,7 @@ export default {
     }
   },
   data: () => ({
-    type: "week",
+    type: "month",
     types: [
       { text: "Por mes", value: "month" },
       { text: "Por semana", value: "week" },

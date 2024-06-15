@@ -23,3 +23,4 @@ GRANT ALL PRIVILEGES ON SCHEMA dentapp TO crentist;
 DROP SCHEMA public;
 GRANT ALL PRIVILEGES ON DATABASE dentapp TO crentist;
 ALTER USER crentist WITH SUPERUSER;
+sudo cp -r dist/\* /var/www/html/
