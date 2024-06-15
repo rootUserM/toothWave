@@ -4,7 +4,10 @@
     <v-main class=" " style="min-height: 300px">
       <v-row class="mx-md-10 my-md-10 mx-4 my-4">
         <v-col>
-          <ConsultingRoom @getConsulRooms="init()"></ConsultingRoom>
+          <ConsultingRoom
+            @getConsulRooms="init()"
+            :dialog="openDialog"
+          ></ConsultingRoom>
           <br />
           <v-data-table
             v-if="this.consulting_rooms.length"
@@ -60,6 +63,7 @@ export default {
     Nav,
   },
   data: () => ({
+    openDialog: false,
     consulting_rooms: [],
     drawer: null,
     headers: [
@@ -107,6 +111,9 @@ export default {
       try {
         var result = await this.getConsultingRooms();
         this.consulting_rooms = result.data;
+        if (!this.consulting_rooms.length) {
+          this.openDialog = true;
+        }
       } catch (error) {
         console.log(error);
       }

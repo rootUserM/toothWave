@@ -117,9 +117,12 @@ export default {
     toEdit: Boolean,
     formToEdit: Object,
     defaultOpen: Boolean,
+    dialog: {
+      type: Boolean,
+      default: false,
+    },
   },
   data: () => ({
-    dialog: false,
     consulting_rooms: null,
     loading: false,
     nameRules: [
