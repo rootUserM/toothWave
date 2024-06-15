@@ -32,8 +32,8 @@ ALLOWED_HOSTS = ['*']
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
-    "http://134.122.122.169",
-    "http://134.122.122.169:8080",
+    "http://3.142.176.140",
+    "http://3.142.176.140:8080",
     "http://citassalud.com.mx",
     "https://citassalud.com.mx",
 ]
