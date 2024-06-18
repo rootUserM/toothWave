@@ -108,12 +108,8 @@
             class="elevation-1"
           >
             <template #[`item.active`]="{ item }">
-              <v-icon size="x-large" color="red" v-if="!item.active"
-                >mdi-circle-small</v-icon
-              >
-              <v-icon size="x-large" color="green" v-if="item.active"
-                >mdi-circle-small</v-icon
-              >
+              <v-icon color="red" v-if="!item.active">mdi-dots-hexagon</v-icon>
+              <v-icon color="green" v-if="item.active">mdi-dots-grid</v-icon>
             </template>
             <template #[`item.actions`]="{ item }">
               <v-icon small class="mr-2" @click="editServiceDialog(item)">
@@ -216,7 +212,7 @@ export default {
       { text: "ID", value: "id" },
       { text: "Servicio", value: "name" },
       { text: "Precio", value: "price" },
-      { text: "Activo", value: "active" },
+      { text: "Estatus", value: "active" },
       { text: "", value: "actions", sortable: false },
     ],
     form: {

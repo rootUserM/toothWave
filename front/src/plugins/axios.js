@@ -4,6 +4,8 @@ import store from "@/store";
 
 const instance = axios.create({
   baseURL: "https://citassalud.com.mx/api",
+  // baseURL: "http://127.0.0.1:8000/api",
+
   timeout: 5000,
 });
 
