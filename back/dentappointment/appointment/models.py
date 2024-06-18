@@ -50,7 +50,7 @@ class Service(CreateRegisBase):
     id_consultingRoom = models.ForeignKey(ConsultingRoom, null=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     price = models.FloatField()
-    active= models.BooleanField(default=False)
+    active= models.BooleanField(default=True)
     def __str__(self):
         return self.name 
 

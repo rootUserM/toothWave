@@ -14,6 +14,10 @@ export default new Vuex.Store({
   state: {
     token: localStorage.getItem("token") || "",
     id: localStorage.getItem("id") || "",
+    snackbar: {
+      show: false,
+      message: "",
+    },
   },
   getters: {
     isAuthenticated: (state) => !!state.token,
@@ -30,6 +34,14 @@ export default new Vuex.Store({
     clearToken(state) {
       state.token = "";
       localStorage.removeItem("token");
+    },
+    showSnackbar(state, message) {
+      state.snackbar.show = true;
+      state.snackbar.message = message;
+    },
+    hideSnackbar(state) {
+      state.snackbar.show = false;
+      state.snackbar.message = "";
     },
   },
   actions: {
@@ -51,6 +63,12 @@ export default new Vuex.Store({
     },
     logout({ commit }) {
       commit("clearToken");
+    },
+    showSnackbar({ commit }, message) {
+      commit("showSnackbar", message);
+      setTimeout(() => {
+        commit("hideSnackbar");
+      }, 3000);
     },
   },
   modules: {},

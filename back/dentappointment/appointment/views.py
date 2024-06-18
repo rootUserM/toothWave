@@ -43,7 +43,6 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['post'],url_path='createappointment', url_name='createappointment',permission_classes=[AllowAny])
     def createAppointmentPublic(self, request, *args, **kwargs):
-        print(request.data)
         if request.data['firstTimePatient']:
            patient_serializer = ZERS.PatientSerializer(data=request.data['patient'])
            if patient_serializer.is_valid():
@@ -54,14 +53,14 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         else:
             phone_number = request.data['patient']['PhoneNumber']
             try:
-                existing_patient = Patient.objects.get(PhoneNumber=phone_number)
-                request.data['id_patient'] = existing_patient.id
+                patient_serializer = Patient.objects.get(PhoneNumber=phone_number)
+                request.data['id_patient'] = patient_serializer.id
             except Patient.DoesNotExist:
-                return Response({'error': 'Patient with the provided phone number does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': 'Introduce un telefono valido'}, status=status.HTTP_400_BAD_REQUEST)
     
         appointment_serializer = self.serializer_class(data=request.data)
         if appointment_serializer.is_valid():
-            appointment_instance = appointment_serializer.save()
+            appointment_serializer.save()
             return Response(appointment_serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(appointment_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -133,9 +132,23 @@ class SericeView(viewsets.ModelViewSet):
     serializer_class =  ZERS.ServiceSerializer
 
     @action(detail=True, methods=['get'],url_path='consultingroom', url_name='consultingroom')
+    def serveServicesPerConsultingRoom(self, request,pk=None):
+        services =  Service.objects.filter(id_consultingRoom=pk,active=True).order_by('-id')
+        result = self.serializer_class(services, many=True)
+        return Response(result.data)
+    
+    @action(detail=True, methods=['get'],url_path='all', url_name='all')
     def servicesPerConsultingRoom(self, request,pk=None):
         services =  Service.objects.filter(id_consultingRoom=pk).order_by('-id')
         result = self.serializer_class(services, many=True)
+        return Response(result.data)
+    
+    @action(detail=True, methods=['put'],url_path='cahngestatus', url_name='cahngestatus')
+    def disableService(self, request,pk=None):
+        service =  Service.objects.get(id=pk)
+        service.active = request.data['status']
+        service.save()
+        result = self.serializer_class(service)
         return Response(result.data)
     
 class TreatmentView(viewsets.ModelViewSet):

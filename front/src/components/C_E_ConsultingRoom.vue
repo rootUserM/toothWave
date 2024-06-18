@@ -202,6 +202,7 @@ export default {
         await this.createConsultingRoom(formData);
         this.dialog = false;
         this.$emit("getConsulRooms");
+        this.$refs.form.reset();
         this.loading = false;
       } catch (error) {
         console.log(error);

@@ -15,147 +15,168 @@
           width="100px"
           height="100px"
         />
-        <v-form ref="form" v-model="valid" @submit.prevent="sendForm">
-          <v-row>
-            <v-col><p class="mt-3">Paciente de primera vez</p></v-col>
-            <v-col>
-              <v-radio-group v-model="form.firstTimePatient">
+        <v-fade-transition>
+          <v-form
+            ref="form"
+            v-model="valid"
+            @submit.prevent="sendForm"
+            v-if="showForm"
+          >
+            <v-row>
+              <v-col><p class="mt-3">Paciente de primera vez</p></v-col>
+              <v-col>
+                <v-radio-group v-model="form.firstTimePatient">
+                  <v-row>
+                    <v-col>
+                      <v-radio label="Si" :value="true"></v-radio>
+                    </v-col>
+                    <v-col>
+                      <v-radio label="No" :value="false"></v-radio>
+                    </v-col>
+                  </v-row>
+                </v-radio-group>
+              </v-col>
+            </v-row>
+            <v-col class="my-3">
+              <div v-if="form.firstTimePatient">
+                <v-text-field
+                  required
+                  name="client_name"
+                  outlined
+                  label="Nombre *"
+                  v-model="form.patient.Name"
+                  :rules="nameRules"
+                ></v-text-field>
                 <v-row>
                   <v-col>
-                    <v-radio label="Si" :value="true"></v-radio>
+                    <v-text-field
+                      required
+                      name="last_name"
+                      outlined
+                      label="Apellido paterno *"
+                      v-model="form.patient.Last_name"
+                      :rules="nameRules"
+                    ></v-text-field>
                   </v-col>
                   <v-col>
-                    <v-radio label="No" :value="false"></v-radio>
+                    <v-text-field
+                      required
+                      name="last_name"
+                      outlined
+                      label="Apellido materno *"
+                      v-model="form.patient.Second_last_name"
+                      :rules="nameRules"
+                    ></v-text-field>
                   </v-col>
                 </v-row>
-              </v-radio-group>
-            </v-col>
-          </v-row>
-          <v-col class="my-3">
-            <div v-if="form.firstTimePatient">
+              </div>
               <v-text-field
                 required
-                name="client_name"
+                name="phone"
                 outlined
-                label="Nombre *"
-                v-model="form.patient.Name"
-                :rules="nameRules"
+                type="phone"
+                label="Numero celular *"
+                hint=""
+                v-model="form.patient.PhoneNumber"
+                :rules="phoneRules"
               ></v-text-field>
-              <v-row>
-                <v-col>
+              <v-textarea
+                name="appointment_motive"
+                outlined
+                label="Motivo de consulta"
+                v-model="form.appointmentMotive"
+              ></v-textarea>
+            </v-col>
+            <v-row class="my-3 pr-4">
+              <v-menu
+                v-model="menu2"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                max-width="290px"
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    required
-                    name="last_name"
+                    v-model="computedDateFormatted"
+                    label="Fecha de consulta"
+                    prepend-icon="mdi-calendar"
+                    readonly
                     outlined
-                    label="Apellido paterno *"
-                    v-model="form.patient.Last_name"
-                    :rules="nameRules"
+                    v-bind="attrs"
+                    v-on="on"
                   ></v-text-field>
-                </v-col>
-                <v-col>
+                </template>
+                <v-date-picker
+                  v-model="date"
+                  no-title
+                  @input="menu2 = false"
+                ></v-date-picker>
+              </v-menu>
+            </v-row>
+            <v-row class="my-md-3 pr-4">
+              <v-menu
+                ref="menu"
+                v-model="menu3"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                :return-value.sync="time"
+                transition="scale-transition"
+                offset-y
+                max-width="290px"
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    required
-                    name="last_name"
                     outlined
-                    label="Apellido materno *"
-                    v-model="form.patient.Second_last_name"
-                    :rules="nameRules"
+                    v-model="time"
+                    label="Hora de consulta"
+                    prepend-icon="mdi-clock-time-four-outline"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
                   ></v-text-field>
-                </v-col>
-              </v-row>
-            </div>
-            <v-text-field
-              required
-              name="phone"
-              outlined
-              type="phone"
-              label="Numero celular *"
-              hint=""
-              v-model="form.patient.PhoneNumber"
-              :rules="phoneRules"
-            ></v-text-field>
-            <v-textarea
-              name="appointment_motive"
-              outlined
-              label="Motivo de consulta"
-              v-model="form.appointmentMotive"
-            ></v-textarea>
-          </v-col>
-          <v-row class="my-3 pr-4">
-            <v-menu
-              v-model="menu2"
-              :close-on-content-click="false"
-              transition="scale-transition"
-              offset-y
-              max-width="290px"
-              min-width="auto"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field
-                  v-model="computedDateFormatted"
-                  label="Fecha de consulta"
-                  prepend-icon="mdi-calendar"
-                  readonly
-                  outlined
-                  v-bind="attrs"
-                  v-on="on"
-                ></v-text-field>
-              </template>
-              <v-date-picker
-                v-model="date"
-                no-title
-                @input="menu2 = false"
-              ></v-date-picker>
-            </v-menu>
-          </v-row>
-          <v-row class="my-md-3 pr-4">
-            <v-menu
-              ref="menu"
-              v-model="menu3"
-              :close-on-content-click="false"
-              :nudge-right="40"
-              :return-value.sync="time"
-              transition="scale-transition"
-              offset-y
-              max-width="290px"
-              min-width="290px"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field
-                  outlined
+                </template>
+                <v-time-picker
+                  v-if="menu3"
                   v-model="time"
-                  label="Hora de consulta"
-                  prepend-icon="mdi-clock-time-four-outline"
-                  readonly
-                  v-bind="attrs"
-                  v-on="on"
-                ></v-text-field>
-              </template>
-              <v-time-picker
-                v-if="menu3"
-                v-model="time"
-                full-width
-                @click:minute="$refs.menu.save(time)"
-                max="19:00:00"
-                min="10:00:00"
-              ></v-time-picker>
-            </v-menu>
-          </v-row>
-          <v-btn
-            :disabled="!valid"
-            name="send_service_request"
-            type="submit"
-            :loading="loading"
-            class="text-none"
-            color="blue darken-1"
-            text
-          >
-            Agendar
-          </v-btn>
-        </v-form>
+                  full-width
+                  @click:minute="$refs.menu.save(time)"
+                  max="19:00:00"
+                  min="10:00:00"
+                ></v-time-picker>
+              </v-menu>
+            </v-row>
+            <v-btn
+              :disabled="!valid"
+              name="send_service_request"
+              type="submit"
+              :loading="loading"
+              class="text-none"
+              color="blue darken-1"
+              text
+            >
+              Agendar
+            </v-btn>
+          </v-form>
+        </v-fade-transition>
+        <v-expand-transition>
+          <v-card v-if="!showForm">
+            <v-card-title class="justify-center">
+              Felicidades {{ appointmentData.name }}!
+            </v-card-title>
+
+            <v-card-subtitle>
+              Tu cita ha sido agendada con exito. <br />
+              Día:{{ appointmentData.date }}
+              <br />
+              Hora:{{ appointmentData.hour }}
+            </v-card-subtitle>
+          </v-card>
+        </v-expand-transition>
       </v-col>
     </v-row>
-    <v-snackbar :timeout="2000" v-model="showAlert" color="black">
+    <v-snackbar :timeout="2000" v-model="showAlert" :color="color">
       {{ message }}
     </v-snackbar>
   </v-container>
@@ -166,6 +187,7 @@ import { mapActions } from "vuex";
 
 export default {
   data: () => ({
+    appointmentData: null,
     phoneRules: [
       (v) => !!v || "Este campo es requerido",
       (v) => /^\d{0,10}$/.test(v) || "Telefono a 10 digitos",
@@ -174,6 +196,8 @@ export default {
       (v) => !!v || "Este campo es requerido",
       (v) => (v && v.length <= 20) || "No cumple con 20 caracteres maximo",
     ],
+    showForm: true,
+    color: "black",
     valid: true,
     logoUrl: null,
     time: null,
@@ -238,10 +262,23 @@ export default {
       this.form.appointmentDate = this.date;
       if (this.$refs.form.validate()) {
         try {
-          await this.createAppointment(this.form);
-          this.showAlert = true;
-          this.$refs.form.reset();
-          this.message = "Cita agendada";
+          let response = await this.createAppointment(this.form);
+          if (response.status == 201) {
+            this.showAlert = true;
+            this.$refs.form.reset();
+            this.message = "Cita agendada";
+            this.appointmentData = {
+              name: response.data.patient_info.Name,
+              date: response.data.appointmentDate,
+              hour: response.data.appointmentHour,
+            };
+            this.showForm = false;
+          }
+          if (response.response.status == 400) {
+            this.showAlert = true;
+            this.message = response.response.data.error;
+            this.color = "red";
+          }
         } catch (error) {
           console.log(error);
         }

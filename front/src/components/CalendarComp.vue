@@ -96,7 +96,7 @@
                     Enviar mensaje
                     <v-btn
                       icon
-                      href="https://api.whatsapp.com/send?phone=5585604475"
+                      :href="`https://api.whatsapp.com/send?phone=${selectedEvent.patient.patient_info.PhoneNumber}`"
                       target="_blanck"
                     >
                       <!-- Enviar recordatorio -->

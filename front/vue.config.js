@@ -1,7 +1,10 @@
 const { defineConfig } = require("@vue/cli-service");
 module.exports = defineConfig({
   lintOnSave: false,
-  // devServer: {
-  //   disableHostCheck: true,
-  // },
+  chainWebpack: (config) => {
+    config.plugin("html").tap((args) => {
+      args[0].title = "Expert Appointment"; // Set the desired title here
+      return args;
+    });
+  },
 });

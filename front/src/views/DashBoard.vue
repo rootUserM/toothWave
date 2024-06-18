@@ -113,6 +113,8 @@ export default {
         this.consulting_rooms = result.data;
         if (!this.consulting_rooms.length) {
           this.openDialog = true;
+        } else {
+          this.openDialog = false;
         }
       } catch (error) {
         console.log(error);
